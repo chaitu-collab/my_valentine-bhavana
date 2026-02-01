@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>For Bhavana 🌸💘</title>
+  <style>
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      /* soft floral-ish background with hearts */
+      background:
+        radial-gradient(circle at top left, rgba(255, 182, 193, 0.7), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(255, 240, 245, 0.9), transparent 60%),
+        radial-gradient(circle at top right, rgba(255, 192, 203, 0.7), transparent 55%),
+        linear-gradient(135deg, #ffe4ec, #ffd6f2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      color: #2b2b2b;
+    }
+
+    body::before {
+      /* subtle flower / petal dots overlay */
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255, 105, 180, 0.35) 2px, transparent 2px),
+        radial-gradient(circle, rgba(255, 182, 193, 0.35) 2px, transparent 2px);
+      background-size: 80px 80px, 110px 110px;
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 2.3rem 2.8rem;
+      border-radius: 22px;
+      box-shadow: 0 16px 40px rgba(255, 105, 180, 0.35);
+      max-width: 460px;
+      border: 2px solid rgba(255, 192, 203, 0.9);
+    }
+
+    .heart {
+      font-size: 2.7rem;
+      margin-bottom: 0.5rem;
+      animation: beat 1s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      margin-bottom: 1.4rem;
+      color: #444;
+    }
+
+    .tiny {
+      font-size: 0.9rem;
+      color: #777;
+      margin-bottom: 1rem;
+    }
+
+    .buttons {
+      position: relative;
+      margin-top: 1.5rem;
+      height: 80px;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: transform 0.2s, background 0.2s, font-size 0.2s;
+      white-space: nowrap;
+    }
+
+    #yesBtn {
+      background: #ff4b8b;
+      color: #fff;
+      z-index: 2;
+    }
+
+    #yesBtn:hover {
+      background: #ff1667;
+      transform: scale(1.08);
+    }
+
+    #noBtn {
+      background: #fdf1f5;
+      color: #d81b60;
+      position: absolute;
+      border: 1px solid #f8b7cf;
+    }
+
+    .message {
+      margin-top: 1.8rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #c2185b;
+      display: none;
+    }
+
+    .subtext {
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="heart">🌸💝🌸</div>
+    <h1>Bhavana, one honest answer…</h1>
+    <h2>Will you be my Valentine and let me annoy you forever (with love)? 😌</h2>
+    <div class="tiny">Warning: Cute overload and bad jokes ahead. Proceed at your own risk. 😏</div>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes, obviously 💕</button>
+      <button id="noBtn">No 😶</button>
+    </div>
+
+    <div class="message" id="msg"></div>
+    <div class="subtext" id="sub"></div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const msg = document.getElementById("msg");
+    const sub = document.getElementById("sub");
+
+    const noTexts = [
+      "No 😶",
+      "Are you sure sure? 🥺",
+      "Last chance to rethink… 🙃",
+      "Bhavana, dil pe mat maar yaar 😭",
+      "Appudaina YES ane plan ledha? 🤨",
+      "System strongly recommends YES ✅",
+      "Error 404: 'No' feeling not found 😜",
+      "Heart crashed. Reboot with YES please 💘",
+      "Accha, ok… but try clicking YES once? 😏",
+      "Fine, I’ll just sit here and love you silently 💐"
+    ];
+    let noIndex = 0;
+    let yesSize = 1;
+
+    function resetNoPosition() {
+      const container = document.querySelector(".buttons").getBoundingClientRect();
+      const centerX = container.width / 2;
+      const centerY = container.height / 2;
+      noBtn.style.left = centerX + 70 + "px";
+      noBtn.style.top = centerY - noBtn.offsetHeight / 2 + "px";
+    }
+
+    resetNoPosition();
+    window.addEventListener("resize", resetNoPosition);
+
+    noBtn.addEventListener("mouseover", () => {
+      const container = document.querySelector(".buttons").getBoundingClientRect();
+      const maxX = container.width - noBtn.offsetWidth;
+      const maxY = container.height - noBtn.offsetHeight;
+
+      const randX = Math.random() * maxX;
+      const randY = Math.random() * maxY;
+
+      noBtn.style.left = randX + "px";
+      noBtn.style.top = randY + "px";
+
+      // change text and grow YES
+      noBtn.textContent = noTexts[noIndex];
+      noIndex = (noIndex + 1) % noTexts.length;
+
+      yesSize += 0.11;
+      yesBtn.style.transform = "scale(" + yesSize + ")";
+    });
+
+    noBtn.addEventListener("click", () => {
+      alert("Access denied: 'No' button is just for decoration, Bhavana 😜");
+    });
+
+    yesBtn.addEventListener("click", () => {
+      msg.style.display = "block";
+      msg.innerHTML = "Hehe, I knew it! 💗<br>From today, you are officially my Valentine, Bhavana.";
+      sub.textContent = "Now you HAVE to blush and send me a selfie. Deal pakka. 😌📸";
+      yesBtn.disabled = true;
+      noBtn.style.display = "none";
+    });
+  </script>
+</body>
+</html>
