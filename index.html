@@ -20,6 +20,7 @@
       margin: 0;
       text-align: center;
       color: #2b2b2b;
+      cursor: none; /* hide cursor for desktop */ /* [web:61] */
     }
 
     body::before {
@@ -160,6 +161,24 @@
     let noIndex = 0;
     let yesSize = 1;
 
+    function moveNoButton() {
+      const container = document.querySelector(".buttons").getBoundingClientRect();
+      const maxX = container.width - noBtn.offsetWidth;
+      const maxY = container.height - noBtn.offsetHeight;
+
+      const randX = Math.random() * maxX;
+      const randY = Math.random() * maxY;
+
+      noBtn.style.left = randX + "px";
+      noBtn.style.top = randY + "px";
+
+      noBtn.textContent = noTexts[noIndex];
+      noIndex = (noIndex + 1) % noTexts.length;
+
+      yesSize += 0.11;
+      yesBtn.style.transform = "scale(" + yesSize + ")";
+    }
+
     function resetNoPosition() {
       const container = document.querySelector(".buttons").getBoundingClientRect();
       const centerX = container.width / 2;
@@ -171,27 +190,10 @@
     resetNoPosition();
     window.addEventListener("resize", resetNoPosition);
 
-    noBtn.addEventListener("mouseover", () => {
-      const container = document.querySelector(".buttons").getBoundingClientRect();
-      const maxX = container.width - noBtn.offsetWidth;
-      const maxY = container.height - noBtn.offsetHeight;
-
-      const randX = Math.random() * maxX;
-      const randY = Math.random() * maxY;
-
-      noBtn.style.left = randX + "px";
-      noBtn.style.top = randY + "px";
-
-      // change text and grow YES
-      noBtn.textContent = noTexts[noIndex];
-      noIndex = (noIndex + 1) % noTexts.length;
-
-      yesSize += 0.11;
-      yesBtn.style.transform = "scale(" + yesSize + ")";
-    });
-
-    noBtn.addEventListener("click", () => {
-      alert("Access denied: 'No' button is just for decoration, Bhavana 😜");
+    // For phone & desktop: move on click/tap
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveNoButton();
     });
 
     yesBtn.addEventListener("click", () => {
